@@ -12,7 +12,8 @@ test:
 
 # set these environment variables on your prod server
 production:
-  <<: *defaults
+  host: flame.mongohq.com
+  port: 27101
   database: bort_app
   username: <%= ENV['MONGO_USERNAME'] %>
   password: <%= ENV['MONGO_PASSWORD'] %>
