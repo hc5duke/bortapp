@@ -1,5 +1,5 @@
 class IndexController < ApplicationController
   def index
-    render :text => 'ok'
+    render :text => '<img src="images/bort.png"/>'
   end
 end
