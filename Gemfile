@@ -30,6 +30,7 @@ gem 'rails', '3.0.7'
 # end
 gem "haml", ">= 3.0.0"
 gem "haml-rails"
+gem "bort"
 gem "jquery-rails"
 gem "bson_ext"
 gem "mongo_mapper", :git => "git://github.com/jnunemaker/mongomapper.git", :branch => "rails3"
