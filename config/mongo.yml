@@ -4,16 +4,16 @@ defaults: &defaults
 
 development:
   <<: *defaults
-  database: bort_app_development
+  database: bortapp_development
 
 test:
   <<: *defaults
-  database: bort_app_test
+  database: bortapp_test
 
 # set these environment variables on your prod server
 production:
   host: flame.mongohq.com
   port: 27105
-  database: bort_app
+  database: bortapp
   username: <%= ENV['MONGO_USERNAME'] %>
   password: <%= ENV['MONGO_PASSWORD'] %>
