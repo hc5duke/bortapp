@@ -1,6 +1,29 @@
-- @destinations.each do |destination|
-  %h3= destination
-  - @stations.each do |station|
-    = station.origin
-    = station.trains.select{|train|train.destination == destination}.map{|train|train.minutes}.join(', ')
-    %br/
+%h3 Downtown
+%table{:border => 1}
+  %tbody
+    - @stations.each do |station|
+      - trains = station.trains.select{|train|@destinations.include?(train.destination)}
+      %tr
+        %th= station.origin
+        - trains.map{|train|train.minutes}.sort.each do |minute|
+          %td= minute
+
+%h3 Dublin
+%table{:border => 1}
+  %tbody
+    - @stations.each do |station|
+      - trains = station.trains.select{|train|train.destination == 'DUBL'}
+      %tr
+        %th= station.origin
+        - trains.map{|train|train.minutes}.sort.each do |minute|
+          %td= minute
+
+- content_for :page_styles do
+  :plain
+    th {
+      text-align: right;
+    }
+    td {
+      text-align: center;
+      width: 28px;
+    }
