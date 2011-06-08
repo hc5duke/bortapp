@@ -33,3 +33,5 @@ Bortapp::Application.configure do
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
 end
+
+Bort::Bort('MW9S-E7SL-26DU-VV8V')

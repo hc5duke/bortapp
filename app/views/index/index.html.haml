@@ -1,2 +1,6 @@
-= image_tag('bort.png')
-= truncate('this is a test string', :length => 2)
+- @destinations.each do |destination|
+  %h3= destination
+  - @stations.each do |station|
+    = station.origin
+    = station.trains.select{|train|train.destination == destination}.map{|train|train.minutes}.join(', ')
+    %br/

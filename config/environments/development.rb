@@ -24,3 +24,4 @@ Bortapp::Application.configure do
   config.action_dispatch.best_standards_support = :builtin
 end
 
+Bort::Bort('MW9S-E7SL-26DU-VV8V')
