@@ -5,8 +5,11 @@
       - trains = station.trains.select{|train|@destinations.include?(train.destination)}
       %tr
         %th= station.origin
-        - trains.map{|train|train.minutes}.sort.each do |minute|
-          %td= minute
+        - trains.sort_by{|train|train.minutes}.each do |train|
+          %td{:class => train.destination.downcase}
+            %span.minute= train.minutes
+            %br/
+            %span.destination= train.destination
 
 %h3 Dublin
 %table{:border => 1}
@@ -25,5 +28,17 @@
     }
     td {
       text-align: center;
-      width: 28px;
+      width: 32px;
+    }
+    td .destination {
+      font-size: 10px;
+    }
+    td.mlbr {
+      background-color: #aaeeaa;
+    }
+    td.daly {
+      background-color: #aaaaee;
+    }
+    td.sfia {
+      background-color: #eeeeaa;
     }
