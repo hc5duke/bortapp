@@ -1,4 +1,4 @@
-%h3 Downtown
+%h3 &raquo;SF
 %table{:border => 1}
   %tbody
     - @stations.each do |station|
@@ -6,20 +6,20 @@
       %tr
         %th= station.origin
         - trains.sort_by{|train|train.minutes}.each do |train|
-          %td{:class => train.destination.downcase}
+          %td{:class => "dest_#{train.destination.downcase}"}
             %span.minute= train.minutes
             %br/
             %span.destination= train.destination
-
-%h3 Dublin
-%table{:border => 1}
-  %tbody
-    - @stations.each do |station|
-      - trains = station.trains.select{|train|train.destination == 'DUBL'}
-      %tr
-        %th= station.origin
-        - trains.map{|train|train.minutes}.sort.each do |minute|
-          %td= minute
+- if @is_evening
+  %h3 &raquo;Dublin
+  %table{:border => 1}
+    %tbody
+      - @stations.each do |station|
+        - trains = station.trains.select{|train|train.destination == 'DUBL'}
+        %tr
+          %th= station.origin
+          - trains.map{|train|train.minutes}.sort.each do |minute|
+            %td= minute
 
 - content_for :page_styles do
   :plain
@@ -33,12 +33,15 @@
     td .destination {
       font-size: 10px;
     }
-    td.mlbr {
+    td.dest_mlbr {
       background-color: #aaeeaa;
     }
-    td.daly {
+    td.dest_daly {
       background-color: #aaaaee;
     }
-    td.sfia {
+    td.dest_sfia {
       background-color: #eeeeaa;
+    }
+    td.dest_24th {
+      background-color: #eeaaee;
     }
