@@ -6,7 +6,7 @@ class IndexController < ApplicationController
 
     @destinations = @stations.map do |station|
       station.destinations
-    end.flatten.uniq - %w(PITT FRMT RICH SHAY DUBL)
+    end.flatten.uniq - %w(PITT FRMT RICH SHAY DUBL CONC NCON MONT)
 
     @max_length = @stations.map do |station|
       station.trains.select do |train|
