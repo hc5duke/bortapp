@@ -8,8 +8,7 @@
       %tr{ :class => station_class(station) }
         %th= station.origin
         - trains.sort_by(&:minutes).first(6).each do |train|
-          - train_data = [train.destination.downcase, train.minutes, train.length]
-          %td{:class => train_class(train), 'data-train' => train_data.join(',')}
+          %td{:class => train_class(train), 'data-destination' => train.destination.downcase, 'data-minutes' => train.minutes, 'data-length' => train.length}
             %span.minute= train.minutes
             %br
             %span.destination
@@ -28,7 +27,7 @@
         %tr{ :class => station_class(station) }
           %th= station.origin
           - trains.sort_by(&:minutes).each do |train|
-            %td{:class => opacity_class(train)}
+            %td{:class => opacity_class(train), 'data-destination' => train.destination.downcase, 'data-minutes' => train.minutes, 'data-length' => train.length}
               %span.minute= train.minutes
               %br
               %span.destination
@@ -76,9 +75,20 @@
       $('.all').click(function(){
         $('.hidden').show();
       });
+      var trainData = function($$){
+        return {
+          destination: $$.data('destination'),
+          minutes: $$.data('minutes'),
+          length: $$.data('length'),
+        };
+      };
       $('td').not('.empty').click(function(){
-        var $$ = $(this);
-        var train = $$.data('train').split(',');
+        var train = trainData($(this));
         console.log(train);
+        var allTrains = $('td[data-destination=' + train.destination + '][data-length=' + train.length + ']');
+        $.each(allTrains, function(i, train){
+          var tr = trainData($(train));
+          console.log([i, tr]);
+        });
       });
     });
