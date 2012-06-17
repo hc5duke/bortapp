@@ -1,5 +1,5 @@
 %h3 &raquo;SF
-%table{:border => 1}
+%table{:border => 1, :cellspacing => 0}
   %tbody
     - @stations.each do |station|
       - trains = station.trains.select{|train|@destinations.include?(train.destination)}
@@ -8,11 +8,14 @@
         - trains.sort_by{|train|train.minutes}.each do |train|
           %td{:class => "dest_#{train.destination.downcase}"}
             %span.minute= train.minutes
-            %br/
+            %br
             %span.destination= train.destination
+        - (6 - trains.length).times do
+          %td .
+
 - if @is_evening
   %h3 &raquo;Dublin
-  %table{:border => 1}
+  %table{:border => 1, :cellspacing => 0}
     %tbody
       - @stations.each do |station|
         - trains = station.trains.select{|train|train.destination == 'DUBL'}
@@ -20,6 +23,8 @@
           %th= station.origin
           - trains.map{|train|train.minutes}.sort.each do |minute|
             %td= minute
+          - (6 - trains.length).times do
+            %td .
 
 - content_for :page_styles do
   :plain

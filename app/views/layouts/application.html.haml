@@ -1,0 +1,14 @@
+!!!
+
+%html
+  %head
+    %title Bortapp
+    = csrf_meta_tag
+    %style{ :type => 'text/css' }
+      :plain
+        body {
+          font-family: andale mono, courier new, courier;
+        }
+      = yield :page_styles
+  %body
+    = yield
