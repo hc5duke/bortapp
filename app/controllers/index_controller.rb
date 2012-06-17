@@ -10,7 +10,8 @@ class IndexController < ApplicationController
     hour < 12 ? morning : evening
   end
 
-private
+  private
+
   def morning
     @stations = %w(dubl).map do |abbreviation|
       Bort::Realtime::Estimates.new(abbreviation)

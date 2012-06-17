@@ -35,3 +35,11 @@ gem "jquery-rails"
 gem "bson_ext"
 gem "mongo_mapper"#, :git => "git://github.com/jnunemaker/mongomapper.git", :branch => "rails3"
 gem "rspec-rails"#, ">= 2.0.1", :group => [:development, :test]
+
+group :development do
+  gem 'wirble'
+  gem 'pry'
+  gem 'pry-rails'
+  gem 'pry-remote'
+  gem 'pry-nav'
+end
