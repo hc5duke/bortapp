@@ -5,9 +5,9 @@ class IndexController < ApplicationController
     elsif params[:evening]
       hour = params[:evening] == 'true' ? 23 : 0
     else
-      hour = Time.now.in_time_zone('Pacific Time (US & Canada)').hour
+      hour = (Time.now.in_time_zone('Pacific Time (US & Canada)').hour + 20) % 24
     end
-    hour < 12 ? morning : evening
+    hour < 8 ? morning : evening
   end
 
   private

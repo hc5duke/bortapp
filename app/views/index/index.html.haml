@@ -1,27 +1,31 @@
-%h3 &raquo;SF
+%h3
+  &raquo;SF
+  = link_to 'all', '#', :class => 'all'
 %table{:border => 1, :cellspacing => 0}
   %tbody
     - @stations.each do |station|
       - trains = station.trains.select{|train|@destinations.include?(train.destination)}
-      %tr
+      %tr{ :class => station_class(station) }
         %th= station.origin
         - trains.sort_by(&:minutes).first(6).each do |train|
-          %td{:class => "dest_#{train.destination.downcase} #{opacity_class(train)}"}
+          - train_data = [train.destination.downcase, train.minutes, train.length]
+          %td{:class => train_class(train), 'data-train' => train_data.join(',')}
             %span.minute= train.minutes
             %br
             %span.destination
               = train.destination[0,2]
               = train_length(train)
         - (6 - trains.length).times do
-          %td.future .
+          %td.empty .
 
 - if @is_evening
-  %h3 &raquo;Dublin
+  %h3
+    &raquo;Dublin
   %table{:border => 1, :cellspacing => 0}
     %tbody
       - @stations.each do |station|
         - trains = station.trains.select{|train|train.destination == 'DUBL'}
-        %tr
+        %tr{ :class => station_class(station) }
           %th= station.origin
           - trains.sort_by(&:minutes).each do |train|
             %td{:class => opacity_class(train)}
@@ -30,7 +34,10 @@
               %span.destination
                 = train_length(train)
           - (6 - trains.length).times do
-            %td.future .
+            %td.empty .
+
+= link_to 'morning', { :morning => 'true' }
+= link_to 'evening', { :evening => 'true' }
 
 - content_for :page_styles do
   :plain
@@ -56,6 +63,22 @@
     td.dest_24th {
       background-color: #eeaaee;
     }
-    td.future {
+    td.future, td.empty {
       opacity: 0.2;
     }
+    tr.hidden {
+      display: none;
+    }
+
+- content_for :page_javascripts do
+  :plain
+    $(function($){
+      $('.all').click(function(){
+        $('.hidden').show();
+      });
+      $('td').not('.empty').click(function(){
+        var $$ = $(this);
+        var train = $$.data('train').split(',');
+        console.log(train);
+      });
+    });
