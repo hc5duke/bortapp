@@ -5,13 +5,15 @@
       - trains = station.trains.select{|train|@destinations.include?(train.destination)}
       %tr
         %th= station.origin
-        - trains.sort_by(&:minutes).each do |train|
-          %td{:class => "dest_#{train.destination.downcase}"}
+        - trains.sort_by(&:minutes).first(6).each do |train|
+          %td{:class => "dest_#{train.destination.downcase} #{opacity_class(train)}"}
             %span.minute= train.minutes
             %br
-            %span.destination= train.destination
+            %span.destination
+              = train.destination[0,2]
+              = train_length(train)
         - (6 - trains.length).times do
-          %td .
+          %td.future .
 
 - if @is_evening
   %h3 &raquo;Dublin
@@ -22,10 +24,13 @@
         %tr
           %th= station.origin
           - trains.sort_by(&:minutes).each do |train|
-            %td
+            %td{:class => opacity_class(train)}
               %span.minute= train.minutes
+              %br
+              %span.destination
+                = train_length(train)
           - (6 - trains.length).times do
-            %td .
+            %td.future .
 
 - content_for :page_styles do
   :plain
@@ -50,4 +55,7 @@
     }
     td.dest_24th {
       background-color: #eeaaee;
+    }
+    td.future {
+      opacity: 0.2;
     }

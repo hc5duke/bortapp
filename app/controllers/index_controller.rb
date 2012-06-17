@@ -12,24 +12,24 @@ class IndexController < ApplicationController
 
   private
 
+  HOME_STATIONS = %w(dubl)
+  DOWNTOWN_STATIONS = %w(16th civc powl mont embr woak)
+  EASTBOUND_DESTINATIONS = %w(PITT FRMT RICH SHAY DUBL CONC NCON MONT)
+
   def morning
-    @stations = %w(dubl).map do |abbreviation|
+    @stations = HOME_STATIONS.map do |abbreviation|
       Bort::Realtime::Estimates.new(abbreviation)
     end
 
-    @destinations = @stations.map do |station|
-      station.destinations
-    end.flatten.uniq
+    @destinations = @stations.map(&:destinations).flatten.uniq
   end
 
   def evening
     @is_evening = true
-    @stations = %w(16th civc powl mont embr woak).map do |abbreviation|
+    @stations = DOWNTOWN_STATIONS.map do |abbreviation|
       Bort::Realtime::Estimates.new(abbreviation)
     end
 
-    @destinations = @stations.map do |station|
-      station.destinations
-    end.flatten.uniq - %w(PITT FRMT RICH SHAY DUBL CONC NCON MONT)
+    @destinations = @stations.map(&:destinations).flatten.uniq - EASTBOUND_DESTINATIONS
   end
 end
