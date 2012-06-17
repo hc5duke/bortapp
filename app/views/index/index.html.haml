@@ -5,7 +5,7 @@
       - trains = station.trains.select{|train|@destinations.include?(train.destination)}
       %tr
         %th= station.origin
-        - trains.sort_by{|train|train.minutes}.each do |train|
+        - trains.sort_by(&:minutes).each do |train|
           %td{:class => "dest_#{train.destination.downcase}"}
             %span.minute= train.minutes
             %br
@@ -21,8 +21,9 @@
         - trains = station.trains.select{|train|train.destination == 'DUBL'}
         %tr
           %th= station.origin
-          - trains.map{|train|train.minutes}.sort.each do |minute|
-            %td= minute
+          - trains.sort_by(&:minutes).each do |train|
+            %td
+              %span.minute= train.minutes
           - (6 - trains.length).times do
             %td .
 
