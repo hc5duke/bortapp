@@ -10,7 +10,11 @@
       %tr{ :class => station_class(station) }
         %th= station.origin
         - trains.sort_by(&:minutes).first(6).each do |train|
-          %td{:class => train_class(train), 'data-destination' => train.destination.downcase, 'data-minutes' => train.minutes, 'data-length' => train.length}
+          %td{:class => train_class(train),
+            'data-origin' => station.origin,
+            'data-destination' => train.destination.downcase,
+            'data-minutes' => train.minutes,
+            'data-length' => train.length}
             %span.minute= train.minutes
             %br
             %span.destination
@@ -64,6 +68,9 @@
     td.dest_24th {
       background-color: #eeaaee;
     }
+    td.highlighted {
+      background-color: #ff0;
+    }
     td.future, td.empty {
       opacity: 0.2;
     }
@@ -73,24 +80,39 @@
 
 - content_for :page_javascripts do
   :plain
+    var adjustments = #{@adjustments.to_json};
     $(function($){
       $('.all').click(function(){
         $('.hidden').show();
+        return false;
       });
       var trainData = function($$){
         return {
+          origin: $$.data('origin'),
           destination: $$.data('destination'),
           minutes: $$.data('minutes'),
           length: $$.data('length'),
         };
       };
       $('td').not('.empty').click(function(){
-        var train = trainData($(this));
-        console.log(train);
-        var allTrains = $('td[data-destination=' + train.destination + '][data-length=' + train.length + ']');
-        $.each(allTrains, function(i, train){
-          var tr = trainData($(train));
-          console.log([i, tr]);
+        var $$ = $(this);
+        var train = trainData($$);
+        $('.highlighted').removeClass('highlighted');
+        $$.addClass('highlighted');
+        var adjust = adjustments[train.origin.toLowerCase()];
+        var minutes = train.minutes + adjust;
+        var dest = ['[data-destination=', train.destination, ']'].join('');
+        var leng = ['[data-length=',      train.length,      ']'].join('');
+        var orig = ['not([data-origin=',  train.origin,      '])'].join('');
+        var allTrains = $('td:' + dest + leng + orig);
+        $.each(allTrains, function(i, tr){
+          var $$ = $(tr);
+          var data = trainData($$);
+          var adjust = adjustments[data.origin.toLowerCase()];
+          var diff = Math.abs(minutes - data.minutes - adjust);
+          if (diff < 2) {
+            $$.addClass('highlighted');
+          }
         });
       });
     });

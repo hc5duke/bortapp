@@ -8,6 +8,8 @@ class IndexController < ApplicationController
       pm = params[:evening] == 'true'
     end
     pm ? evening : morning
+
+    @adjustments = ADJUSTMENTS
   end
 
   private
@@ -15,6 +17,7 @@ class IndexController < ApplicationController
   HOME_STATIONS = %w(dubl)
   DOWNTOWN_STATIONS = %w(16th civc powl mont embr woak)
   EASTBOUND_DESTINATIONS = %w(PITT FRMT RICH SHAY DUBL CONC NCON MONT)
+  ADJUSTMENTS = Hash[DOWNTOWN_STATIONS.zip([0, 3, 4, 6, 7, 14])]
 
   def morning
     @stations = HOME_STATIONS.map do |abbreviation|
