@@ -1,6 +1,8 @@
 %h3
   &raquo;SF
   = link_to 'all', '#', :class => 'all'
+  = @time.strftime('%I:%M %p')
+
 %table{:border => 1, :cellspacing => 0}
   %tbody
     - @stations.each do |station|

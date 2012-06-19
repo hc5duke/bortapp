@@ -1,13 +1,13 @@
 class IndexController < ApplicationController
   def index
+    @time = Time.now.in_time_zone('Pacific Time (US & Canada)')
+    pm = @time.hour < 4 || @time.hour > 12
     if params[:morning]
-      hour = params[:morning] == 'true' ? 0 : 23
+      pm = params[:morning] != 'true'
     elsif params[:evening]
-      hour = params[:evening] == 'true' ? 23 : 0
-    else
-      hour = (Time.now.in_time_zone('Pacific Time (US & Canada)').hour + 20) % 24
+      pm = params[:evening] == 'true'
     end
-    hour < 8 ? morning : evening
+    pm ? evening : morning
   end
 
   private
