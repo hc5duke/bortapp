@@ -3,7 +3,7 @@
   = link_to 'all', '#', :class => 'all'
   = @time.strftime('%I:%M %p')
 
-%table{:border => 1, :cellspacing => 0}
+%table#to_sfo{:border => 1, :cellspacing => 0}
   %tbody
     - @stations.each do |station|
       - trains = station.trains.select{|train|@destinations.include?(train.destination)}
@@ -26,13 +26,15 @@
 - if @is_evening
   %h3
     &raquo;Dublin
-  %table{:border => 1, :cellspacing => 0}
+  %table#to_dub{:border => 1, :cellspacing => 0}
     %tbody
       - @stations.each do |station|
         - trains = station.trains.select{|train|train.destination == 'DUBL'}
         %tr{ :class => station_class(station) }
           %th= station.origin
           - trains.sort_by(&:minutes).each do |train|
+            - if true # debug
+              - train.minutes += 10
             %td{:class => opacity_class(train), 'data-destination' => train.destination.downcase, 'data-minutes' => train.minutes, 'data-length' => train.length}
               %span.minute= train.minutes
               %br
@@ -68,8 +70,11 @@
     td.dest_24th {
       background-color: #eeaaee;
     }
-    td.highlighted {
+    table#to_sfo td.highlighted {
       background-color: #ff0;
+    }
+    table#to_dub td.highlighted {
+      background-color: #f80;
     }
     td.future, td.empty {
       opacity: 0.2;
@@ -82,6 +87,7 @@
   :plain
     var adjustments = #{@adjustments.to_json};
     $(function($){
+      var toDub = $('table#to_dub tr:first-child td:not(.empty)');
       $('.all').click(function(){
         $('.hidden').show();
         return false;
@@ -105,12 +111,19 @@
         var leng = ['[data-length=',      train.length,      ']'].join('');
         var orig = ['not([data-origin=',  train.origin,      '])'].join('');
         var allTrains = $('td:' + dest + leng + orig);
-        $.each(allTrains, function(i, tr){
-          var $$ = $(tr);
+        $.each(allTrains, function(i, td){
+          var $$ = $(td);
           var data = trainData($$);
           var adjust = adjustments[data.origin.toLowerCase()];
           var diff = Math.abs(minutes - data.minutes - adjust);
           if (diff < 2) {
+            minutes = Math.min(minutes, data.minutes + adjust);
+            $$.addClass('highlighted');
+          }
+        });
+        $.each(toDub, function(i, td){
+          var $$ = $(td);
+          if ($$.data('minutes') > minutes) {
             $$.addClass('highlighted');
           }
         });
