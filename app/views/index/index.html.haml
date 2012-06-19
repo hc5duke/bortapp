@@ -33,8 +33,6 @@
         %tr{ :class => station_class(station) }
           %th= station.origin
           - trains.sort_by(&:minutes).each do |train|
-            - if true # debug
-              - train.minutes += 10
             %td{:class => opacity_class(train), 'data-destination' => train.destination.downcase, 'data-minutes' => train.minutes, 'data-length' => train.length}
               %span.minute= train.minutes
               %br
